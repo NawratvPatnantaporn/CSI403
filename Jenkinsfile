@@ -13,10 +13,21 @@ pipeline {
       }
     }
     stage('Build') {
-      steps {
-        print "Hello Build"
-      }
-    }
+            steps {
+                print "Docker Build Image"
+                script {
+                    bat "docker build -t csi403-frontend ."
+                    print "Docker Build Image Success"
+                }
+
+                print "Docker Image Run Container"
+                script {
+                    bat "docker rm -f csi403-frontend-run || true"
+                    bat "docker run -d --name csi402-frontend -p 54100:3000 csi403-frontend"
+                    print "Docker Image Run Container Success"
+                }
+            }
+        }
     stage('Test') {
       steps {
         print "Hello Test"
